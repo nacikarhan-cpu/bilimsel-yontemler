@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bilimsel Yöntem ve Uygulama Basamakları</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#121b2f;
+      --card2:#0f172a;
+      --text:#e6eefc;
+      --muted:#a9b7d0;
+      --accent:#38bdf8;
+      --ok:#22c55e;
+      --bad:#ef4444;
+      --warn:#f59e0b;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(900px 500px at 10% 0%, rgba(56,189,248,.18), transparent 50%),
+                  radial-gradient(700px 400px at 90% 20%, rgba(34,197,94,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+    header{
+      padding: 28px 18px 14px;
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+    .title{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(22px, 2.4vw, 30px);
+      letter-spacing:.2px;
+    }
+    .subtitle{
+      margin:8px 0 0;
+      color:var(--muted);
+      max-width: 72ch;
+    }
+    .wrap{
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 10px 18px 28px;
+    }
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 14px 0 16px;
+    }
+    .tabbtn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor:pointer;
+      transition: .15s transform, .15s background, .15s border;
+      user-select:none;
+      font-weight:600;
+    }
+    .tabbtn:hover{ transform: translateY(-1px); border-color: rgba(56,189,248,.35); }
+    .tabbtn.active{
+      background: rgba(56,189,248,.18);
+      border-color: rgba(56,189,248,.45);
+      box-shadow: 0 0 0 3px rgba(56,189,248,.10) inset;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 14px;
+    }
+    @media (max-width: 880px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 8px 8px 0;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      transition: .15s transform, .15s background, .15s border;
+      user-select:none;
+      font-weight:700;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(56,189,248,.35); }
+    .btn.primary{
+      background: rgba(56,189,248,.16);
+      border-color: rgba(56,189,248,.45);
+    }
+    .btn.danger{
+      background: rgba(239,68,68,.14);
+      border-color: rgba(239,68,68,.35);
+    }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .muted{ color: var(--muted); }
+    .divider{ height:1px; background: var(--border); margin: 14px 0; }
+
+    /* Keşfet: ağaç/accordion */
+    .tree{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    details{
+      border:1px solid var(--border);
+      border-radius: 14px;
+      overflow:hidden;
+      background: rgba(0,0,0,.12);
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 12px 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+      font-weight:800;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .badge{
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      background: rgba(56,189,248,.18);
+      border:1px solid rgba(56,189,248,.35);
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+    details.active summary{
+      background: rgba(56,189,248,.10);
+      border-bottom: 1px solid var(--border);
+    }
+    .detailbody{
+      padding: 10px 12px 14px;
+      color: var(--text);
+    }
+    .klist{
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .note{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(245,158,11,.45);
+      background: rgba(245,158,11,.10);
+      color: #ffe7b1;
+      margin-top: 10px;
+    }
+    .mini{
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Quiz */
+    .qtop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .progress{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      overflow:hidden;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: rgba(56,189,248,.55);
+    }
+    .qbox{
+      background: rgba(0,0,0,.10);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .qtext{
+      margin: 0 0 10px;
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .opt{
+      width:100%;
+      text-align:left;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      cursor:pointer;
+      margin: 8px 0 0;
+      font-weight: 700;
+      transition: .12s transform, .12s background, .12s border;
+    }
+    .opt:hover{ transform: translateY(-1px); border-color: rgba(56,189,248,.35); }
+    .opt[disabled]{ cursor:not-allowed; opacity:.85; transform:none; }
+    .opt.correct{
+      border-color: rgba(34,197,94,.55);
+      background: rgba(34,197,94,.14);
+    }
+    .opt.wrong{
+      border-color: rgba(239,68,68,.55);
+      background: rgba(239,68,68,.14);
+    }
+    .feedback{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+    }
+    .feedback.ok{ border-color: rgba(34,197,94,.45); background: rgba(34,197,94,.10); color: #c9f7d8; }
+    .feedback.bad{ border-color: rgba(239,68,68,.45); background: rgba(239,68,68,.10); color: #ffd1d1; }
+    .small{
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* Özet */
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .chip{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    footer{
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 16px 18px 26px;
+      color: var(--muted);
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="title">
+      <div>
+        <h1>Bilimsel Yöntem ve Uygulama Basamakları</h1>
+        <p class="subtitle">
+          Keşfet bölümünde basamakları aç-kapa biçiminde inceleyin. Kendini Dene bölümünde 5 seçenekli test çözün.
+          Özet bölümünde bilim insanının temel özelliklerini görün.
+        </p>
+      </div>
+      <div class="row">
+        <span class="pill" id="soundStatus">Ses: Hazır (etkileşim gerekebilir)</span>
+        <button class="btn" id="toggleSoundBtn" type="button">Sesi Aç/Kapat</button>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Sekmeler">
+      <button class="tabbtn active" data-tab="kesfet" role="tab" aria-selected="true">Keşfet</button>
+      <button class="tabbtn" data-tab="quiz" role="tab" aria-selected="false">Kendini Dene</button>
+      <button class="tabbtn" data-tab="ozet" role="tab" aria-selected="false">Özet</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- KEŞFET -->
+    <section id="kesfet" class="tab" aria-label="Keşfet">
+      <div class="grid">
+        <div class="card">
+          <h2>Keşfet: Bilimsel yöntem basamakları</h2>
+          <div class="row">
+            <button class="btn primary" id="nextStepBtn" type="button">Sıradaki basamağa odaklan</button>
+            <button class="btn" id="expandAllBtn" type="button">Hepsini aç</button>
+            <button class="btn" id="collapseAllBtn" type="button">Hepsini kapat</button>
+          </div>
+          <div class="divider"></div>
+          <div id="tree" class="tree" aria-label="Bilimsel süreç basamakları"></div>
+
+          <div class="note">
+            <strong>Not:</strong> Hipotez doğrulanmazsa “terk edilmez”, yeni verilerle <strong>yenilenir</strong> ve tahmin basamağına geri dönülür.
+          </div>
+          <div class="mini">Kaynak: Yüklediğiniz PDF’deki “7 adımda bilimsel süreç”, “hipotez yenilenmesi” ve özet döngü sayfaları.</div>
+        </div>
+
+        <div class="card">
+          <h2>Hızlı hatırlatma</h2>
+          <p class="muted">
+            Bilim, sadece “parça bilgi” toplamak değildir. Belirli bir düzen içinde yapılan sistemli çalışmalardır.
+            Gözlem, doğayı okumaktır. Deney, doğaya soru sormaktır.
+          </p>
+          <div class="divider"></div>
+
+          <h2>Teori ve kanun</h2>
+          <ul class="klist">
+            <li><strong>Teori:</strong> Neden-sonuç ilişkisi kurar. “Neden?” sorusuna cevap verir.</li>
+            <li><strong>Kanun:</strong> Doğruluğu evrensel kabul görür. “Ne?” sorusuna cevap verir.</li>
+          </ul>
+
+          <div class="divider"></div>
+          <p class="small">
+            İpucu: Bilim doğrusal bir çizgi değildir. Kendini düzelten bir döngüdür.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="tab" aria-label="Kendini Dene" style="display:none">
+      <div class="grid">
+        <div class="card">
+          <div class="qtop">
+            <div>
+              <h2>Kendini Dene: 5 seçenekli test</h2>
+              <p class="muted" style="margin:6px 0 0">
+                Her soru tek doğru içerir. Doğru/yanlışta sesli uyarı verir. Kronometre ve müzik yoktur.
+              </p>
+            </div>
+            <div class="row">
+              <button class="btn primary" id="startQuizBtn" type="button">Teste başla / yeniden başlat</button>
+              <button class="btn danger" id="revealBtn" type="button">Cevabı gösterme kapalı</button>
+            </div>
+          </div>
+
+          <div class="progress" aria-label="İlerleme">
+            <div class="bar" id="bar"></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div id="qbox" class="qbox" aria-live="polite">
+            <p class="muted">Testi başlatmak için “Teste başla / yeniden başlat” butonuna basın.</p>
+          </div>
+
+          <div class="divider"></div>
+          <p class="small" id="scoreLine">Skor: -</p>
+        </div>
+
+        <div class="card">
+          <h2>Konu kısa özet</h2>
+          <ul class="klist">
+            <li>Problemi netleştirin. Gözlem yapın.</li>
+            <li>Veri toplayın. Hipotez kurun.</li>
+            <li>Tahmin üretin. Kontrollü deney tasarlayın.</li>
+            <li>Sonuçları analiz edin. Karar verin.</li>
+            <li>Hipotez desteklenmezse yenileyin.</li>
+          </ul>
+
+          <div class="divider"></div>
+          <h2>İpuçları</h2>
+          <ul class="klist">
+            <li>Nicel gözlem ölçü aletlerine dayanır. Nesneldir.</li>
+            <li>Nitel gözlem duyu organlarına dayanır. Öznel olabilir.</li>
+            <li>Bilimde evrensellik için SI birimleri kullanılır.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÖZET -->
+    <section id="ozet" class="tab" aria-label="Özet" style="display:none">
+      <div class="grid">
+        <div class="card">
+          <h2>Özet: Bilim insanının özellikleri</h2>
+          <p class="muted">
+            Bilimsel süreç, disiplinli düşünme gerektirir. Bu süreçte bilim insanı şu özellikleri taşır:
+          </p>
+          <div class="chips" id="chips"></div>
+
+          <div class="divider"></div>
+
+          <h2>Kısa kontrol listesi</h2>
+          <ul class="klist">
+            <li>Problemi açık yazar.</li>
+            <li>Değişkenleri belirler ve kontrol eder.</li>
+            <li>Veriyi dürüstçe kaydeder.</li>
+            <li>Sonuç ile yorum ayrımını korur.</li>
+            <li>Gerekirse hipotezi yeniler.</li>
+          </ul>
+
+          <div class="divider"></div>
+          <p class="small">
+            Paylaşım notu: Bu uygulamayı YouTube’da paylaşmak için bir bağlantı üzerinden yayınlayın (Netlify / GitHub Pages gibi).
+            Videonun açıklamasına linki ekleyin.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>Öğretmen için kullanım önerisi</h2>
+          <ul class="klist">
+            <li>Keşfet bölümünde her basamak için 1 örnek isteyin.</li>
+            <li>Quiz’de yanlış sorularda ilgili basamağa geri dönün.</li>
+            <li>Teori–kanun ayrımını 1 gerçek örnekle pekiştirin.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Tasarım: Naci Karhan
+  </footer>
+
+<script>
+(() => {
+  /* -------------------- Ses (müzik yok, sadece uyarı) -------------------- */
+  let soundEnabled = true;
+  let audioCtx = null;
+
+  const soundStatus = document.getElementById("soundStatus");
+  const toggleSoundBtn = document.getElementById("toggleSoundBtn");
+
+  function ensureAudio(){
+    if(!audioCtx){
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(audioCtx.state === "suspended"){
+      // Kullanıcı etkileşimi sonrası açılır
+      audioCtx.resume().catch(()=>{});
+    }
+  }
+
+  function beep(type){
+    if(!soundEnabled) return;
+    ensureAudio();
+    if(!audioCtx) return;
+
+    const now = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+
+    o.type = "sine";
+
+    // “çınn” benzeri: kısa yükselen; yanlış: daha düşük ve kısa iki darbe
+    if(type === "ok"){
+      o.frequency.setValueAtTime(660, now);
+      o.frequency.exponentialRampToValueAtTime(990, now + 0.09);
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.22, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      o.start(now);
+      o.stop(now + 0.16);
+    } else {
+      // “uyarı” sesi: iki kısa düşük frekans
+      o.frequency.setValueAtTime(180, now);
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.20, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      o.start(now);
+      o.stop(now + 0.09);
+
+      const o2 = audioCtx.createOscillator();
+      const g2 = audioCtx.createGain();
+      o2.type = "square";
+      o2.frequency.setValueAtTime(140, now + 0.11);
+      g2.gain.setValueAtTime(0.0001, now + 0.11);
+      g2.gain.exponentialRampToValueAtTime(0.16, now + 0.12);
+      g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.19);
+      o2.connect(g2);
+      g2.connect(audioCtx.destination);
+      o2.start(now + 0.11);
+      o2.stop(now + 0.20);
+    }
+  }
+
+  function setSoundUI(){
+    soundStatus.textContent = "Ses: " + (soundEnabled ? "Açık" : "Kapalı");
+    toggleSoundBtn.textContent = soundEnabled ? "Sesi Kapat" : "Sesi Aç";
+  }
+  toggleSoundBtn.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    if(soundEnabled) ensureAudio();
+    setSoundUI();
+  });
+  setSoundUI();
+
+  /* -------------------- Sekmeler -------------------- */
+  const tabBtns = [...document.querySelectorAll(".tabbtn")];
+  const tabs = {
+    kesfet: document.getElementById("kesfet"),
+    quiz: document.getElementById("quiz"),
+    ozet: document.getElementById("ozet"),
+  };
+
+  function openTab(name){
+    Object.entries(tabs).forEach(([k,el]) => el.style.display = (k === name ? "" : "none"));
+    tabBtns.forEach(b => {
+      const active = b.dataset.tab === name;
+      b.classList.toggle("active", active);
+      b.setAttribute("aria-selected", active ? "true" : "false");
+    });
+  }
+  tabBtns.forEach(b => b.addEventListener("click", () => openTab(b.dataset.tab)));
+
+  /* -------------------- Keşfet verisi (PDF’ye dayalı) -------------------- */
+  const steps = [
+    {
+      no: 1,
+      title: "Problemin tespiti",
+      why: "Araştırmanın ilk ve kritik adımıdır. Sorunu netleştirir.",
+      bullets: [
+        "Çözülmesi gereken sorunu açık tanımlayın.",
+        "Net tanım, doğru çözüm yolunu açar."
+      ],
+      children: [
+        { title: "Soru cümlesi", bullets: ["Ne, neden, nasıl sorusunu yazın.", "Kapsamı sınırlayın."] },
+        { title: "Amaç", bullets: ["Araştırmanın hedefini tek cümlede belirtin."] }
+      ]
+    },
+    {
+      no: 2,
+      title: "Gözlem yapma",
+      why: "Doğayı inceleyip ilk ipuçlarını toplarsınız.",
+      bullets: [
+        "Nitel gözlem: duyu organlarına dayanır, öznel olabilir.",
+        "Nicel gözlem: ölçü aletlerine dayanır, nesneldir."
+      ],
+      children: [
+        { title: "Nitel gözlem örneği", bullets: ["“Su sıcaktır.”"] },
+        { title: "Nicel gözlem örneği", bullets: ["“Su 100°C’de kaynar.”"] }
+      ]
+    },
+    {
+      no: 3,
+      title: "Verilerin toplanması",
+      why: "Probleme uygun gerçekleri toplar ve düzenlersiniz.",
+      bullets: [
+        "Veriyi kayıt altına alın.",
+        "Evrensellik için SI birimlerini kullanın."
+      ],
+      children: [
+        { title: "SI örnekleri", bullets: ["Uzunluk: metre (m)", "Sıvı hacim: litre (L)"] }
+      ]
+    },
+    {
+      no: 4,
+      title: "Hipotezin kurulması",
+      why: "Veriye dayalı, probleme yönelik geçici çözüm yoludur.",
+      bullets: [
+        "Eldeki verilere uygun olmalı.",
+        "Deney ve gözlemlerle test edilebilir olmalı.",
+        "Gerektiğinde değiştirilebilir olmalı."
+      ],
+      children: [
+        { title: "Hipotez = geçici çözüm", bullets: ["Kesinleşmiş bilgi değildir.", "Sınanabilir olmalıdır."] }
+      ]
+    },
+    {
+      no: 5,
+      title: "Tahminlerde bulunma",
+      why: "Hipotez doğruysa beklenen sonucu mantıkla öngörürsünüz.",
+      bullets: [
+        "“Eğer … (hipotez) … ise, o halde … (sonuç) … olmalıdır.”",
+        "Tahmin, deneyde ölçülecek çıktıyı netleştirir."
+      ],
+      children: [
+        { title: "Örnek", bullets: ["Hipotez: Bitki ışık alamadığı için büyümüyor.", "Tahmin: Işık alan bitki büyümelidir."] }
+      ]
+    },
+    {
+      no: 6,
+      title: "Kontrollü deneyler",
+      why: "Değişkenleri kontrol ederek hipotezin geçerliliğini sınarsınız.",
+      bullets: [
+        "Laboratuvar ortamında yapılır.",
+        "Amaç: değişkenleri kontrol altında tutmak."
+      ],
+      children: [
+        { title: "Temel fikir", bullets: ["Bağımsız değişkeni değiştirin.", "Diğerlerini sabit tutun.", "Sonucu ölçün."] }
+      ]
+    },
+    {
+      no: 7,
+      title: "Sonuçların analizi ve karar",
+      why: "Sonuç hipotezi destekliyor mu, karar verirsiniz.",
+      bullets: [
+        "Sonuç hipotezi doğruluyorsa: teori/kanun yoluna devam.",
+        "Doğrulamıyorsa: bir sonraki adıma geçmeden hipotezi yenileyin."
+      ],
+      children: [
+        { title: "Kritik uyarı", bullets: ["Hipotez “terk edilmez”, yeni verilerle yenilenir."] },
+        { title: "Bilim döngüdür", bullets: ["Gerekirse önceki basamaklara geri dönülür."] }
+      ]
+    }
+  ];
+
+  const tree = document.getElementById("tree");
+  let focusIndex = 0;
+
+  function renderTree(){
+    tree.innerHTML = "";
+    steps.forEach((s, idx) => {
+      const d = document.createElement("details");
+      d.dataset.idx = String(idx);
+
+      const sum = document.createElement("summary");
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = s.no;
+      const title = document.createElement("span");
+      title.textContent = s.title;
+
+      sum.appendChild(badge);
+      sum.appendChild(title);
+
+      const body = document.createElement("div");
+      body.className = "detailbody";
+
+      const p = document.createElement("p");
+      p.style.margin = "0 0 8px";
+      p.innerHTML = `<strong>Ne yaparsınız?</strong> <span class="muted">${escapeHtml(s.why)}</span>`;
+      body.appendChild(p);
+
+      const ul = document.createElement("ul");
+      ul.className = "klist";
+      s.bullets.forEach(b => {
+        const li = document.createElement("li");
+        li.textContent = b;
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+
+      if(s.children?.length){
+        const cdiv = document.createElement("div");
+        cdiv.style.marginTop = "10px";
+
+        s.children.forEach(ch => {
+          const sub = document.createElement("details");
+          sub.style.marginTop = "8px";
+          const ssum = document.createElement("summary");
+          ssum.innerHTML = `<span class="badge" style="width:28px;height:28px;border-radius:10px;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.35)">↳</span>
+                            <span>${escapeHtml(ch.title)}</span>`;
+          const sbody = document.createElement("div");
+          sbody.className = "detailbody";
+          const sul = document.createElement("ul");
+          sul.className = "klist";
+          ch.bullets.forEach(bb => {
+            const li = document.createElement("li");
+            li.textContent = bb;
+            sul.appendChild(li);
+          });
+          sbody.appendChild(sul);
+          sub.appendChild(ssum);
+          sub.appendChild(sbody);
+          cdiv.appendChild(sub);
+        });
+
+        body.appendChild(cdiv);
+      }
+
+      d.appendChild(sum);
+      d.appendChild(body);
+
+      // focus görünümü
+      if(idx === focusIndex){
+        d.classList.add("active");
+        d.open = true;
+      }
+
+      d.addEventListener("toggle", () => {
+        // Kullanıcı açtığında aktif görünüm ver
+        if(d.open){
+          focusIndex = idx;
+          markActive();
+        }
+      });
+
+      tree.appendChild(d);
+    });
+
+    markActive();
+  }
+
+  function markActive(){
+    [...tree.querySelectorAll("details")].forEach((d, i) => {
+      d.classList.toggle("active", i === focusIndex);
+    });
+  }
+
+  function expandAll(open){
+    [...tree.querySelectorAll("details")].forEach(d => d.open = open);
+  }
+
+  function focusNext(){
+    focusIndex = (focusIndex + 1) % steps.length;
+    renderTree();
+    const current = tree.querySelector(`details[data-idx="${focusIndex}"]`);
+    if(current) current.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  document.getElementById("nextStepBtn").addEventListener("click", focusNext);
+  document.getElementById("expandAllBtn").addEventListener("click", () => expandAll(true));
+  document.getElementById("collapseAllBtn").addEventListener("click", () => expandAll(false));
+
+  renderTree();
+
+  /* -------------------- Quiz -------------------- */
+  const qbox = document.getElementById("qbox");
+  const startQuizBtn = document.getElementById("startQuizBtn");
+  const bar = document.getElementById("bar");
+  const scoreLine = document.getElementById("scoreLine");
+  const revealBtn = document.getElementById("revealBtn");
+
+  let revealMode = false;
+  function updateRevealUI(){
+    revealBtn.textContent = revealMode ? "Cevabı gösterme açık" : "Cevabı gösterme kapalı";
+    revealBtn.classList.toggle("danger", revealMode);
+  }
+  revealBtn.addEventListener("click", () => {
+    revealMode = !revealMode;
+    updateRevealUI();
+  });
+  updateRevealUI();
+
+  const questionBank = [
+    {
+      q: "Bilimsel süreçte “veriye dayalı, probleme yönelik geçici çözüm yolu” hangisidir?",
+      options: ["Teori", "Kanun", "Hipotez", "Gözlem", "Analiz"],
+      answer: 2,
+      exp: "Hipotez, probleme yönelik geçici çözüm yoludur. Test edilebilir ve gerektiğinde değiştirilebilir."
+    },
+    {
+      q: "Kontrollü deney sonuçları hipotezi desteklemezse ne yapılmalıdır?",
+      options: ["Deney terk edilir", "Hipotez terk edilir", "Hipotez yenilenir", "Veri toplanmaz", "Sonuçlar yok sayılır"],
+      answer: 2,
+      exp: "Hipotez terk edilmez. Yeni verilerle yenilenir ve tahmin basamağına geri dönülür."
+    },
+    {
+      q: "“Su 100°C’de kaynar.” ifadesi hangi gözlem türüne örnektir?",
+      options: ["Nitel gözlem", "Nicel gözlem", "Dolaylı gözlem", "Yorum", "Varsayım"],
+      answer: 1,
+      exp: "Nicel gözlem ölçüye dayanır. 100°C sayısal ölçümdür."
+    },
+    {
+      q: "PDF’deki “7 adımda bilimsel süreç” şemasına göre ilk basamak hangisidir?",
+      options: ["Gözlem yapma", "Hipotez kurma", "Problemin tespiti", "Tahminlerde bulunma", "Sonuç analizi"],
+      answer: 2,
+      exp: "Şemada ilk basamak problemin tespitidir. Sorunu netleştirmek başlangıçtır."
+    },
+    {
+      q: "Nitel gözlem için en uygun tanım hangisidir?",
+      options: [
+        "Ölçü aletlerine dayanır ve değişmez",
+        "Duyu organlarına dayanır ve kişiden kişiye değişebilir",
+        "Sadece laboratuvarda yapılır",
+        "Mutlaka sayı içerir",
+        "Her zaman hipotezden sonra yapılır"
+      ],
+      answer: 1,
+      exp: "Nitel gözlem duyu organlarına dayanır. Öznel olabilir."
+    },
+    {
+      q: "Nicel gözlemin ayırt edici özelliği hangisidir?",
+      options: [
+        "Öznel olması",
+        "Duyu organlarına dayanması",
+        "Ölçü aletlerine dayanması ve nesnel olması",
+        "Sadece tahmine dayanması",
+        "Kanunla aynı anlamda kullanılması"
+      ],
+      answer: 2,
+      exp: "Nicel gözlem ölçü aleti ve sayısal veri ile yapılır. Nesneldir."
+    },
+    {
+      q: "Bilimsel çalışmalarda evrensellik için hangi yaklaşım önemlidir?",
+      options: ["Kişisel yorumları artırmak", "SI birimlerini kullanmak", "Tahmini verilerle yetinmek", "Gözlemi atlamak", "Deneyi her durumda terk etmek"],
+      answer: 1,
+      exp: "Evrensel bilim dili için standart ölçü birimleri (SI) kullanılır."
+    },
+    {
+      q: "Aşağıdakilerden hangisi iyi bir hipotezin özelliği değildir?",
+      options: ["Test edilebilir olması", "Eldeki veriye uygun olması", "Gerekirse değiştirilebilir olması", "Kesin olarak kanıtlanmış olması", "Deney ve gözleme açık olması"],
+      answer: 3,
+      exp: "Hipotez kesin kanıtlanmış bilgi değildir. Geçici ve sınanabilir olmalıdır."
+    },
+    {
+      q: "Kontrollü deneylerin temel amacı hangisidir?",
+      options: [
+        "Sadece gözlem yapmak",
+        "Değişkenleri kontrol ederek hipotezi sınamak",
+        "Veri toplamayı bırakmak",
+        "Teoriyi kanuna dönüştürmek",
+        "Nicel gözlemi yasaklamak"
+      ],
+      answer: 1,
+      exp: "Kontrollü deneyde amaç değişkenleri kontrol altında tutarak hipotezin geçerliliğini test etmektir."
+    },
+    {
+      q: "Sonuçlar hipotezi doğruluyorsa süreçte hangi yol izlenir?",
+      options: ["Bir sonraki adıma geçilmez", "Hipotez silinir", "Teori/kanun yoluna devam edilir", "Veriler yok sayılır", "Gözlem iptal edilir"],
+      answer: 2,
+      exp: "Desteklenen hipotez, bilgi birikimiyle teori/kanun yolunda güçlenebilir."
+    },
+    {
+      q: "Teori, daha çok hangi soruya cevap verir?",
+      options: ["Ne?", "Neden?", "Ne zaman?", "Kim?", "Kaç?"],
+      answer: 1,
+      exp: "Teori neden-sonuç ilişkisi kurar. “Neden?” sorusuna cevap verir."
+    },
+    {
+      q: "Kanun, daha çok hangi soruya cevap verir?",
+      options: ["Neden?", "Nasıl?", "Ne?", "Nerede?", "Kiminle?"],
+      answer: 2,
+      exp: "Kanun, doğadaki düzeni tanımlar. “Ne?” sorusuna cevap verir."
+    }
+  ];
+
+  let quiz = {
+    items: [],
+    index: 0,
+    correct: 0,
+    answered: false
+  };
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function startQuiz(){
+    ensureAudio(); // ilk etkileşimde ses açılabilsin
+    quiz.items = shuffle(questionBank).slice(0, Math.max(10, questionBank.length)); // en az 10
+    quiz.index = 0;
+    quiz.correct = 0;
+    quiz.answered = false;
+    renderQuestion();
+  }
+
+  function progressPct(){
+    return Math.round((quiz.index / quiz.items.length) * 100);
+  }
+
+  function renderQuestion(){
+    const total = quiz.items.length;
+    const done = quiz.index;
+    const pct = Math.min(100, Math.round((done / total) * 100));
+    bar.style.width = pct + "%";
+    scoreLine.textContent = `Skor: ${quiz.correct} / ${done} (Toplam: ${total})`;
+
+    if(quiz.index >= total){
+      const rate = Math.round((quiz.correct / total) * 100);
+      qbox.innerHTML = `
+        <h3 style="margin:0 0 8px">Test bitti</h3>
+        <p class="muted" style="margin:0 0 10px">Sonuç: <strong>${quiz.correct}</strong> doğru / <strong>${total}</strong> soru. Başarı: <strong>%${rate}</strong>.</p>
+        <div class="row">
+          <button class="btn primary" id="againBtn" type="button">Yeniden başlat</button>
+          <button class="btn" id="goKesfetBtn" type="button">Keşfet bölümüne dön</button>
+        </div>
+        <div class="divider"></div>
+        <p class="small">Öneri: Yanlış yaptığınız kavramları Keşfet bölümünde ilgili basamakta tekrar edin.</p>
+      `;
+      document.getElementById("againBtn").addEventListener("click", startQuiz);
+      document.getElementById("goKesfetBtn").addEventListener("click", () => openTab("kesfet"));
+      return;
+    }
+
+    quiz.answered = false;
+
+    const item = quiz.items[quiz.index];
+
+    // Şıkları karıştır (cevap indeksini koru)
+    const indexed = item.options.map((t,i) => ({t,i}));
+    const shuffled = shuffle(indexed);
+    const correctIdxInShuffled = shuffled.findIndex(x => x.i === item.answer);
+
+    qbox.innerHTML = `
+      <div class="row" style="justify-content:space-between">
+        <span class="pill">Soru ${quiz.index + 1} / ${total}</span>
+        <span class="pill">İlerleme: %${Math.round(((quiz.index+1)/total)*100)}</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="qtext">${escapeHtml(item.q)}</p>
+      <div id="opts"></div>
+      <div id="fb" class="feedback" style="display:none"></div>
+
+      <div class="divider"></div>
+      <div class="row">
+        <button class="btn" id="skipBtn" type="button">Soruyu geç</button>
+        <button class="btn primary" id="nextBtn" type="button" disabled>Sonraki soru</button>
+      </div>
+
+      <p class="small" style="margin-top:10px">
+        Not: Tarayıcı sesleri, ilk tıklamadan sonra aktifleşebilir.
+      </p>
+    `;
+
+    const opts = document.getElementById("opts");
+    const fb = document.getElementById("fb");
+    const nextBtn = document.getElementById("nextBtn");
+    const skipBtn = document.getElementById("skipBtn");
+
+    shuffled.forEach((o, pos) => {
+      const btn = document.createElement("button");
+      btn.className = "opt";
+      btn.type = "button";
+      btn.textContent = String.fromCharCode(65 + pos) + ") " + o.t;
+      btn.addEventListener("click", () => choose(pos, correctIdxInShuffled, item, shuffled));
+      opts.appendChild(btn);
+    });
+
+    skipBtn.addEventListener("click", () => {
+      quiz.index++;
+      renderQuestion();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      quiz.index++;
+      renderQuestion();
+    });
+  }
+
+  function choose(chosenPos, correctPos, item, shuffled){
+    if(quiz.answered) return;
+    quiz.answered = true;
+
+    const buttons = [...document.querySelectorAll(".opt")];
+    buttons.forEach(b => b.disabled = true);
+
+    const fb = document.getElementById("fb");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const isCorrect = chosenPos === correctPos;
+
+    // Görsel işaretleme
+    buttons[correctPos].classList.add("correct");
+    if(!isCorrect) buttons[chosenPos].classList.add("wrong");
+
+    // Ses
+    beep(isCorrect ? "ok" : "bad");
+
+    // Geri bildirim
+    fb.style.display = "";
+    if(isCorrect){
+      quiz.correct++;
+      fb.className = "feedback ok";
+      fb.innerHTML = `<strong>Doğru.</strong> <span class="muted">${escapeHtml(item.exp)}</span>`;
+    } else {
+      fb.className = "feedback bad";
+      const correctText = buttons[correctPos].textContent || "";
+      fb.innerHTML = `<strong>Yanlış.</strong> Doğru cevap: <strong>${escapeHtml(correctText)}</strong><br><span class="muted">${escapeHtml(item.exp)}</span>`;
+    }
+
+    if(revealMode){
+      // Reveal açıkken doğru şık zaten işaretleniyor, ekstra bilgi vermeyelim.
+    }
+
+    nextBtn.disabled = false;
+
+    // skor satırını anlık güncelle
+    scoreLine.textContent = `Skor: ${quiz.correct} / ${quiz.index + 1} (Toplam: ${quiz.items.length})`;
+    bar.style.width = Math.min(100, Math.round(((quiz.index+1) / quiz.items.length) * 100)) + "%";
+  }
+
+  startQuizBtn.addEventListener("click", startQuiz);
+
+  /* -------------------- Özet chips -------------------- */
+  const scientistTraits = [
+    "Meraklı",
+    "Eleştirel düşünür",
+    "Tarafsız olmaya çalışır",
+    "Dürüst ve etik",
+    "Sabırlı ve ısrarcı",
+    "Sistemli çalışır",
+    "Kanıta dayanır",
+    "Açık fikirli",
+    "Yaratıcı",
+    "Gözlemci",
+    "İletişime açık",
+    "Hata payını kabul eder"
+  ];
+
+  const chips = document.getElementById("chips");
+  scientistTraits.forEach(t => {
+    const s = document.createElement("span");
+    s.className = "chip";
+    s.textContent = t;
+    chips.appendChild(s);
+  });
+
+  /* -------------------- Güvenli metin -------------------- */
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+})();
+</script>
+</body>
+</html>
